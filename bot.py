@@ -120,7 +120,7 @@ def update(update: Update, context: CallbackContext):
 
 def delete(update: Update, context: CallbackContext):
     original_message = update.message.reply_to_message
-    main_message = MainMessage.get(message_id=original_message.message_id, chat_id=update.edited_message.chat_id)
+    main_message = MainMessage.get(message_id=original_message.message_id, chat_id=update.message.chat_id)
     for message in main_message.sent_messages:
         try:
             main_bot.delete_message(chat_id=message.chat_id, message_id=message.message_id)
