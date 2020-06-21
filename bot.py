@@ -7,8 +7,6 @@ from telegram import Update, Bot
 from telegram.ext import Updater, MessageHandler, Filters, CallbackContext, CommandHandler
 
 import logging
-import socket
-from config import *
 
 from models import *
 
@@ -22,7 +20,7 @@ main_bot = Bot(TOKEN2)
 
 def retrieve_chats():
     response = requests.get(SEND_LIST_URL)
-    return list(map(lambda x : x['Telegram ID'], json.loads(response.text)))
+    return list(map(lambda x: x['Telegram ID'], json.loads(response.text)))
 
 
 def resend(update: Update, context: CallbackContext):
@@ -93,7 +91,6 @@ def resend(update: Update, context: CallbackContext):
             except telegram.error.TelegramError as e:
                 logger.log(logging.ERROR, e)
 
-
     main_message = MainMessage.create(message_id=update.message.message_id, chat_id=update.message.chat_id)
     for message in messages:
         SentMessage.create(main_message=main_message, message_id=message.message_id, chat_id=message.chat_id)
@@ -106,12 +103,14 @@ def update(update: Update, context: CallbackContext):
     for message in main_message.sent_messages:
         if update.edited_message.text is not None:
             try:
-                main_bot.edit_message_text(chat_id=message.chat_id, message_id=message.message_id, text=update.edited_message.text)
+                main_bot.edit_message_text(chat_id=message.chat_id, message_id=message.message_id,
+                                           text=update.edited_message.text)
             except telegram.error.TelegramError as e:
                 logger.log(logging.ERROR, e)
         elif update.edited_message.caption is not None:
             try:
-                main_bot.edit_message_caption(chat_id=message.chat_id, message_id=message.message_id, caption=update.edited_message.caption)
+                main_bot.edit_message_caption(chat_id=message.chat_id, message_id=message.message_id,
+                                              caption=update.edited_message.caption)
             except telegram.error.TelegramError as e:
                 logger.log(logging.ERROR, e)
 
@@ -128,6 +127,7 @@ def delete(update: Update, context: CallbackContext):
             logger.log(logging.ERROR, e)
 
     update.message.reply_text("Удалено!")
+
 
 if __name__ == "__main__":
     updater = Updater(TOKEN, use_context=True)
