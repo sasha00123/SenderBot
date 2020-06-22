@@ -18,6 +18,12 @@ logger = logging.getLogger(__name__)
 main_bot = Bot(TOKEN2)
 
 
+def get_admins():
+    if ADMINS:
+        return ADMINS
+    return list(map(int, requests.get(ADMINS_URL).json()))
+
+
 def retrieve_chats():
     response = requests.get(SEND_LIST_URL)
     return list(map(lambda x: x['Telegram ID'], json.loads(response.text)))
@@ -28,11 +34,11 @@ def resend(update: Update, context: CallbackContext):
         chat_ids = retrieve_chats()
     else:
         update.message.reply_text("Тестовый режим включен! Сообщения доставляются только администраторам.")
-        chat_ids = ADMINS
+        chat_ids = get_admins()
 
-    if update.effective_chat.id not in ADMINS:
+    if update.effective_chat.id not in get_admins():
         update.message.reply_text("Доступ запрещен!")
-        logger.log(logging.INFO, f"{update.effective_chat.id} not in {ADMINS}")
+        logger.log(logging.INFO, f"{update.effective_chat.id} not in {get_admins()}")
         return
 
     messages = []
