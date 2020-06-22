@@ -11,7 +11,7 @@ USE_WEBHOOK = bool(int(os.environ.get('USE_WEBHOOK', '0')))
 PORT = int(os.environ.get('PORT', '8443'))
 SEND_LIST_URL = os.environ.get('SEND_LIST_URL')
 
-ADMINS = list(map(int, os.environ.get('ADMINS', '').split(',')))
+ADMINS = list(map(int, os.environ.get('ADMINS', '0').split(',')))
 ADMINS_URL = os.environ.get('ADMINS_URL', '')
 DATABASE = connect(os.environ.get('DATABASE_URL'), autocommit=True, autorollback=True)
 

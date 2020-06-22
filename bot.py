@@ -19,9 +19,9 @@ main_bot = Bot(TOKEN2)
 
 
 def get_admins():
-    if ADMINS:
+    if ADMINS and ADMINS[0] != 0:
         return ADMINS
-    return list(map(int, requests.get(ADMINS_URL).json()))
+    return requests.get(ADMINS_URL).json()
 
 
 def retrieve_chats():
