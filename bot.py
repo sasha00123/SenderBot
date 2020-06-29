@@ -52,7 +52,8 @@ def resend(update: Update, context: CallbackContext):
             with open(filename, 'rb') as photo:
                 try:
                     messages.append(
-                        main_bot.send_photo(chat_id, photo, caption=update.message.caption, timeout=120)
+                        main_bot.send_photo(chat_id, photo, caption=update.message.caption, timeout=120,
+                                            reply_markup=update.message.reply_markup)
                     )
                 except telegram.error.TelegramError as e:
                     logger.log(logging.ERROR, e)
@@ -67,7 +68,8 @@ def resend(update: Update, context: CallbackContext):
             with open(filename, 'rb') as video:
                 try:
                     messages.append(
-                        main_bot.send_video(chat_id, video, caption=update.message.caption, timeout=120)
+                        main_bot.send_video(chat_id, video, caption=update.message.caption, timeout=120,
+                                            reply_markup=update.message.reply_markup)
                     )
                 except telegram.error.TelegramError as e:
                     logger.log(logging.ERROR, e)
@@ -82,7 +84,8 @@ def resend(update: Update, context: CallbackContext):
             with open(filename, 'rb') as document:
                 try:
                     messages.append(
-                        main_bot.send_document(chat_id, document, update.message.caption, timeout=120)
+                        main_bot.send_document(chat_id, document, update.message.caption, timeout=120,
+                                               reply_markup=update.message.reply_markup)
                     )
                 except telegram.error.TelegramError as e:
                     logger.log(logging.ERROR, e)
@@ -92,7 +95,7 @@ def resend(update: Update, context: CallbackContext):
         for chat_id in chat_ids:
             try:
                 messages.append(
-                    main_bot.send_message(chat_id, update.message.text)
+                    main_bot.send_message(chat_id, update.message.text, reply_markup=update.message.reply_markup)
                 )
             except telegram.error.TelegramError as e:
                 logger.log(logging.ERROR, e)
